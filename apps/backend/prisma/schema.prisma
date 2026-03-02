@@ -5,15 +5,150 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+enum RentalStatus {
+  SUBMITTED // bejott
+  ACCEPTED // elfogadott
+  REJECTED // elutasitott
+  ISSUED // kiadott
+  RETURNED // visszahozott
 }
 
 model User {
-  authSchId String @id
-  email     String @unique
+  id       String  @id @default(uuid())
+  authId   String  @unique @map("auth_id") // connected through email
+  googleId String? @map("google_id")
+
+  // Relations
+  news            News[]        @relation("NewsAuthor")
+  rentals         Rental[]      @relation("RentalUser")
+  issuedRentals   Rental[]      @relation("RentalIssuer")
+  returnedRentals Rental[]      @relation("RentalReceiver")
+  reservations    Reservation[]
+  userRoles       UserRole[]
+  auditLogs       AuditLog[]
+
+  @@map("users")
+}
+
+model Role {
+  id   String @id @default(uuid())
+  name String @unique // guest, member, rental, box, news, admin
+
+  // Relations
+  userRoles UserRole[]
+
+  @@map("roles")
+}
+
+model UserRole {
+  userId String @map("user_id")
+  roleId String @map("role_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+model News {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  content   String   @map("db_text") // markdown content
+  authorId  String   @map("author_id")
+
+  author User @relation("NewsAuthor", fields: [authorId], references: [id])
+
+  @@map("news")
+}
+
+model Faq {
+  id      String @id @default(uuid())
+  content String
+
+  @@map("faqs")
+}
+
+model Sport {
+  id   String @id @default(uuid())
+  name String
+
+  equipment SportEquipment[]
+
+  @@map("sports")
+}
+
+model SportEquipment {
+  id          String  @id @default(uuid())
+  imageUrl    String? @map("image_url")
+  quantity    Int     @map("quantity")
+  name        String
+  description String?
+  sportId     String  @map("sport_id")
+
+  sport           Sport             @relation(fields: [sportId], references: [id])
+  rentalEquipment RentalEquipment[]
+
+  @@map("sport_equipment")
+}
+
+model Rental {
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now()) @map("created_at")
+  startTime      DateTime     @map("start_time")
+  endTime        DateTime     @map("end_time")
+  userId         String       @map("user_id")
+  status         RentalStatus
+  issuerUserId   String?      @map("issuer_user_id")
+  receiverUserId String?      @map("receiver_user_id")
+
+  user            User              @relation("RentalUser", fields: [userId], references: [id])
+  issuer          User?             @relation("RentalIssuer", fields: [issuerUserId], references: [id])
+  receiver        User?             @relation("RentalReceiver", fields: [receiverUserId], references: [id])
+  rentalEquipment RentalEquipment[]
+
+  @@map("rentals")
+}
+
+model RentalEquipment {
+  id            String @id @default(uuid())
+  rentalId      String @map("rental_id")
+  equipmentId   String @map("equipment_id")
+  quantityTaken Int    @map("quantity_taken")
+
+  rental    Rental         @relation(fields: [rentalId], references: [id], onDelete: Cascade)
+  equipment SportEquipment @relation(fields: [equipmentId], references: [id])
+
+  @@map("rental_equipment")
+}
+
+model Reservation {
+  id        String       @id @default(uuid())
+  userId    String       @map("user_id")
+  startTime DateTime     @map("start_time")
+  endTime   DateTime     @map("end_time")
+  status    RentalStatus @map("rental_status")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("reservations")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  action    String
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
 }
