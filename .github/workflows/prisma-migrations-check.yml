@@ -3,7 +3,7 @@ name: Check Prisma Migrations
 on:
   pull_request:
     paths:
-      - 'apps/backend/prisma/schema.prisma'
+      - '../../apps/backend/schema.prisma'
       - 'apps/backend/prisma/migrations/**'
 
 jobs:
