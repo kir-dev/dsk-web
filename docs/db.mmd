@@ -1,0 +1,89 @@
+erDiagram
+    User {
+        UUID id PK
+        UUID auth_id "email-en keresztül van osszekotve"
+        UUID google_id FK
+    }
+
+    Role {
+        UUID id PK
+        Text nev "(guest, member, berles, box, news, admin)"
+    }
+
+    Hir {
+        UUID id PK
+        TimeStamp created
+        Markdown db_text
+    }
+
+    Gyik {
+        Text static
+    }
+
+    Sportszer {
+        UUID id PK
+        RAW kep_link
+        Number darab
+        Text nev
+        Text leiras
+        UUID sport_id FK
+    }
+
+    Sport {
+        UUID id PK
+        Text nev
+    }
+
+    Berles {
+        UUID id PK
+        UUID sportszer_berles_id FK
+        TimeStamp created_at
+        TimeStamp kezdet
+        TimeStamp veg
+        UUID user_id FK
+        Enum status
+        UUID user_kiado_id FK
+        UUID user_visszavevo_id FK
+    }
+
+    Foglalas {
+        UUID user_id PK
+        TimeStamp kezdet
+        TimeStamp veg
+        Enum berles_status "(bejott, elfogadott, elutasitott, Kiadott, Visszahozott)"
+    }
+
+    Status {
+        Enum berles_status "(bejott, elfogadott, elutasitott, Kiadott, Visszahozott)"
+    }
+
+    Berles_Sportszer {
+        UUID id PK
+        UUID berles_id FK
+        UUID sportszer_id FK
+        Number elvitt_darab
+    }
+    User_Role {
+        UUID user_id FK
+        UUID role_id FK
+    }
+
+    Audit_Log {
+        UUID id PK
+        UUID user_id FK
+        TimeStamp created
+        Text action
+    }
+
+    User ||--o{ Hir : author
+    User ||--o{ Berles : "creates/updates"
+
+    User }o--o{ User_Role : has
+    User_Role }o--o{ Role : has
+
+    Sportszer }o--|| Berles_Sportszer : includes
+    Berles_Sportszer }o--|| Berles : includes
+
+    Sport }o--o{ Sportszer : has
+
+
