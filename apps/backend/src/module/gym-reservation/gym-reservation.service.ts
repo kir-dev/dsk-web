@@ -1,19 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'nestjs-prisma';
 import { CreateGymReservationDto } from './dto/create-gym-reservation.dto';
 import { UpdateGymReservationDto } from './dto/update-gym-reservation.dto';
-import { GymReservation } from '@prisma/client';
+import { PrismaConfigService } from '../../config/config/prisma.config.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { Prisma } from 'PrismaGen/client';
 
 @Injectable()
 export class GymReservationService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaConfigService,
+    private readonly jwtService: JwtService,
+    private readonly config: ConfigService
+  ) {}
 
-  async create(createReservationDto: CreateGymReservationDto): Promise<void> {
+  async create(createReservationDto: CreateGymReservationDto): Promise<GymReservation> {
     this.prisma.gymReservation.create(createReservationDto);
   }
 
-  async findById(id: string): Promise<GymReservation> {
-    return this.prisma.gymReservation.findFirst(id);
+  async findById(id: string): Promise<> {
+    return this.prisma.rental.findFirst(id);
   }
 
   async findAll(): Promise<GymReservation[]> {
