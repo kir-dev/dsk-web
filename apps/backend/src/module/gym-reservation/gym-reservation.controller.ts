@@ -18,7 +18,7 @@ export class GymReservationController {
   }
 
   @Get('by-date')
-  async findByTime(@Query() startTime: Date, @Query() endTime: Date): Promise<object> {
+  async findByTime(@Query('startTime') startTime: Date, @Query('endTime') endTime: Date): Promise<object> {
     return this.gymReservationService.findAllByDate(startTime, endTime);
   }
 
@@ -34,6 +34,6 @@ export class GymReservationController {
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
-    this.gymReservationService.delete(id);
+    await this.gymReservationService.delete(id);
   }
 }
