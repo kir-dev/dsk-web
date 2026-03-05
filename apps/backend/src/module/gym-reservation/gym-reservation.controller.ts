@@ -34,6 +34,6 @@ export class GymReservationController {
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
-    this.gymReservationService.delete(id);
+    await this.gymReservationService.delete(id);
   }
 }
