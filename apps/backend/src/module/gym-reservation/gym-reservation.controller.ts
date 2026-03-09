@@ -3,7 +3,7 @@ import { GymReservationService } from './gym-reservation.service';
 import { CreateGymReservationDto } from './dto/create-gym-reservation.dto';
 import { UpdateGymReservationDto } from './dto/update-gym-reservation.dto';
 
-@Controller('gym-reservation')
+@Controller()
 export class GymReservationController {
   constructor(private readonly gymReservationService: GymReservationService) {}
 

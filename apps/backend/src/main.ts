@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 
-import { AppModule } from './app.module';
+import { AppModule } from './module/app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -27,7 +27,7 @@ async function bootstrap(): Promise<void> {
   logger.log(`Using CORS origin ${process.env.CORS_ORIGIN ?? '*'}`);
 
   app.setGlobalPrefix('api');
-  logger.log(`Using global prefix /api`);
+  logger.log(`Using global prefix /api`, { exclude: ['scalar(.*)'] });
 
   app.use(
     '/scalar',

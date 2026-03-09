@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateGymReservationDto } from './dto/create-gym-reservation.dto';
 import { UpdateGymReservationDto } from './dto/update-gym-reservation.dto';
-import { PrismaConfigService } from '../../config/config/prisma.config.service';
+import { PrismaConfigService } from '../../config/prisma.config.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { RentalStatus } from 'PrismaGen/client';
