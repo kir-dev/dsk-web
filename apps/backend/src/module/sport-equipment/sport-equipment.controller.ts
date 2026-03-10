@@ -1,5 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { SportEquipmentService } from './sport-equipment.service';
+import { CreateSportEquipmentDto } from './dto/create-sport-equipment.dto';
+import { UpdateSportEquipmentDto } from './dto/update-sport-equipment.dto';
 
 @Controller('sport-equipment')
 export class SportEquipmentController {
@@ -16,13 +18,13 @@ export class SportEquipmentController {
   }
 
   @Post()
-  async create(@Body() data: any): Promise<object> {
-    return this.sportEquipmentService.create(data);
+  async create(@Body() createSportEquipmentDto: CreateSportEquipmentDto): Promise<object> {
+    return this.sportEquipmentService.create(createSportEquipmentDto);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() data: any): Promise<object> {
-    return this.sportEquipmentService.update(id, data);
+  async update(@Param('id') id: string, @Body() updateSportEquipmentDto: UpdateSportEquipmentDto): Promise<object> {
+    return this.sportEquipmentService.update(id, updateSportEquipmentDto);
   }
 
   @Delete(':id')
