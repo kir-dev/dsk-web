@@ -2,19 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateGymReservationDto } from './dto/create-gym-reservation.dto';
 import { UpdateGymReservationDto } from './dto/update-gym-reservation.dto';
 import { PrismaConfigService } from '../../config/prisma.config.service';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { RentalStatus } from 'PrismaGen/client';
+import { Reservation } from 'PrismaGen/client';
 
 @Injectable()
 export class GymReservationService {
-  constructor(
-    private readonly prisma: PrismaConfigService,
-    private readonly jwtService: JwtService,
-    private readonly config: ConfigService
-  ) {}
+  constructor(private readonly prisma: PrismaConfigService) {}
 
-  async create(createReservationDto: CreateGymReservationDto): Promise<object> {
+  async create(createReservationDto: CreateGymReservationDto): Promise<Reservation> {
     return this.prisma.reservation.create({
       data: {
         userId: createReservationDto.userId,
@@ -25,23 +20,23 @@ export class GymReservationService {
     });
   }
 
-  async findById(id: string): Promise<object> {
+  async findById(id: string): Promise<Reservation> {
     return this.prisma.reservation.findFirst({ where: { id: id } });
   }
 
-  async findAllByUserId(userId: string): Promise<object[]> {
+  async findAllByUserId(userId: string): Promise<Reservation[]> {
     return this.prisma.reservation.findMany({ where: { userId: userId } });
   }
 
-  async findAll(): Promise<object[]> {
+  async findAll(): Promise<Reservation[]> {
     return this.prisma.reservation.findMany();
   }
 
-  async findAllByDate(startTime: Date, endTime: Date): Promise<object[]> {
+  async findAllByDate(startTime: Date, endTime: Date): Promise<Reservation[]> {
     return this.prisma.reservation.findMany({ where: { startTime: { gte: startTime, lte: endTime } } });
   }
 
-  async update(id: string, updateReservationDto: UpdateGymReservationDto): Promise<object> {
+  async update(id: string, updateReservationDto: UpdateGymReservationDto): Promise<Reservation> {
     return this.prisma.reservation.update({ where: { id }, data: updateReservationDto });
   }
 

@@ -3,7 +3,7 @@ import { IsNotEmpty, IsDateString, IsUUID } from 'class-validator';
 export class CreateGymReservationDto {
   @IsNotEmpty()
   @IsUUID()
-  userId: string;
+  userId?: string;
 
   @IsNotEmpty()
   @IsDateString()
