@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaConfigService } from '../../config/prisma.config.service';
 import { CreateSportEquipmentDto } from './dto/create-sport-equipment.dto';
 import { UpdateSportEquipmentDto } from './dto/update-sport-equipment.dto';
-import { SportEquipment } from '@prisma/client';
+import { SportEquipment } from 'PrismaGen/client';
 
 @Injectable()
 export class SportEquipmentService {

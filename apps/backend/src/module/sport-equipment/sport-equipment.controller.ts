@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, NotFoundException, Param, ParseUUIDPipe,
 import { SportEquipmentService } from './sport-equipment.service';
 import { CreateSportEquipmentDto } from './dto/create-sport-equipment.dto';
 import { UpdateSportEquipmentDto } from './dto/update-sport-equipment.dto';
-import { SportEquipment } from '@prisma/client';
+import { SportEquipment } from 'PrismaGen/client';
 
 @Controller('sport-equipment')
 export class SportEquipmentController {
