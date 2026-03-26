@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaConfigService } from '../../config/prisma.config.service';
+import { CreateSportEquipmentDto } from './dto/create-sport-equipment.dto';
+import { UpdateSportEquipmentDto } from './dto/update-sport-equipment.dto';
+import { SportEquipment } from 'PrismaGen/client';
 
 @Injectable()
 export class SportEquipmentService {
   constructor(private readonly prisma: PrismaConfigService) {}
 
-  async findAll(): Promise<object[]> {
+  async findAll(): Promise<SportEquipment[]> {
     return this.prisma.sportEquipment.findMany({
       include: {
         sport: true,
@@ -14,9 +17,9 @@ export class SportEquipmentService {
     });
   }
 
-  async findOne(id: string): Promise<object> {
+  async findOne(id: string): Promise<SportEquipment> {
     return this.prisma.sportEquipment.findUnique({
-      where: { id },
+      where: { id: id },
       include: {
         sport: true,
         rentalEquipment: true,
@@ -24,15 +27,11 @@ export class SportEquipmentService {
     });
   }
 
-  async create(data: any): Promise<object> {
+  async create(createSportEquipmentDto: CreateSportEquipmentDto): Promise<SportEquipment> {
+    createSportEquipmentDto.imageUrl = createSportEquipmentDto.imageUrl ?? '';
+
     return this.prisma.sportEquipment.create({
-      data: {
-        name: data.name,
-        description: data.description,
-        quantity: data.quantity,
-        imageUrl: data.imageUrl,
-        sportId: data.sportId,
-      },
+      data: createSportEquipmentDto,
       include: {
         sport: true,
         rentalEquipment: true,
@@ -40,16 +39,10 @@ export class SportEquipmentService {
     });
   }
 
-  async update(id: string, data: any): Promise<object> {
+  async update(id: string, updateSportEquipmentDto: UpdateSportEquipmentDto): Promise<SportEquipment> {
     return this.prisma.sportEquipment.update({
-      where: { id },
-      data: {
-        name: data.name,
-        description: data.description,
-        quantity: data.quantity,
-        imageUrl: data.imageUrl,
-        sportId: data.sportId,
-      },
+      where: { id: id },
+      data: updateSportEquipmentDto,
       include: {
         sport: true,
         rentalEquipment: true,
@@ -59,7 +52,7 @@ export class SportEquipmentService {
 
   async delete(id: string): Promise<void> {
     await this.prisma.sportEquipment.delete({
-      where: { id },
+      where: { id: id },
     });
   }
 }
