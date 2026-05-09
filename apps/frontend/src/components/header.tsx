@@ -1,4 +1,5 @@
 import { HTMLAttributes } from 'react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,7 +21,9 @@ export function Header({
 >) {
   return (
     <div className={cn('h-[15dvh] bg-gray-500 flex w-full px-[2dvw]', className)} {...props}>
-      <div className={'flex items-center'}>Diák Sport Kör</div>
+      <div className={'flex items-center'}>
+        <Link href={'/'}>Diák Sport Kör</Link>
+      </div>
       <div className={'flex-1 flex gap-2 justify-end items-center'}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -28,14 +31,28 @@ export function Header({
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
-              <DropdownMenuItem>Összes sportszer</DropdownMenuItem>
-              <DropdownMenuItem>Bérlés</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href='/equipment'>Összes sportszer</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href='/equipment/rental'>Bérlés</Link>
+              </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button>Boxterem</Button>
-        <Button>Gy.I.K</Button>
-        {isLoggedIn ? <Button>Profil</Button> : <Button>Bejelentkezés</Button>}
+        <Button asChild>
+          <Link href='/reservation'>Boxterem</Link>
+        </Button>
+        <Button asChild>
+          <Link href='/gyik'>Gy.I.K</Link>
+        </Button>
+        {isLoggedIn ? (
+          <Button>
+            <Link href='/Profile'>Profil</Link>
+          </Button>
+        ) : (
+          <Button>Bejelentkezés</Button>
+        )}
       </div>
     </div>
   );

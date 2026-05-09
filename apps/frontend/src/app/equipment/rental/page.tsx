@@ -1,6 +1,4 @@
 'use client';
-
-import { useRef } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,15 +7,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { EquipmentGird } from '@/components/equipmentGird';
+import { useRef } from 'react';
 import { SportEntity } from '@/types/sportEntity';
 import { sportEntityMock } from '@/mocks/sportEntityMock';
-import { Equipment } from '@/components/equipment';
 import { EquipmentEntity } from '@/types/equipmentEntity';
 import { equipmentEntityMock } from '@/mocks/equipmentEntityMock';
-import { Router } from 'lucide-react';
-import { EquipmentGird } from '@/components/equipmentGird';
 
-export default function EquipmentPage() {
+export default function EquipmentRentalPage() {
   const sports = useRef<SportEntity[] | null>(sportEntityMock);
   const equipment = useRef<EquipmentEntity[] | null>(equipmentEntityMock);
   return (
@@ -53,7 +50,7 @@ export default function EquipmentPage() {
             <Button>Search</Button>
           </div>
         </div>
-        <EquipmentGird equipment={equipment.current || []} isRentable={false} />
+        <EquipmentGird equipment={equipment.current || []} isRentable={true} />
       </div>
     </main>
   );
